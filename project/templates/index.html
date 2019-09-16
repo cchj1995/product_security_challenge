@@ -9,28 +9,33 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="assets/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/main.css') }}">
 </head>
 
 <body>
     <div class="login-form">
         <form action="" method="post">
             <h2 class="text-center">Log in</h2>
+				{% with messages = get_flashed_messages() %}
+				{% if messages %}
+                {{ messages[0] }}
+				{% endif %}
+				{% endwith %}
             <div class="form-group">
-                <input type="text" class="form-control" placeholder="Username" required="required">
+                <input type="text" name="name" class="form-control" placeholder="Username" required="required">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" placeholder="Password" required="required">
+                <input type="password" name="password" class="form-control" placeholder="Password" required="required">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </div>
             <div class="clearfix">
-                <label class="pull-left checkbox-inline"><input type="checkbox"> Remember me</label>
+                <label class="pull-left checkbox-inline"><input type="checkbox" name="remember"> Remember me</label>
                 <a href="#" class="pull-right">Forgot Password?</a>
             </div>
         </form>
-        <p class="text-center"><a href="#">Create an Account</a></p>
+        <p class="text-center"><a href="{{ url_for('auth.register') }}">Create an Account</a></p>
     </div>
 </body>
 
