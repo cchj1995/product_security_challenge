@@ -1,8 +1,9 @@
 # auth.py
 
+from re import match
 from flask import Blueprint
 from . import db
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, escape
 from flask_login import login_user, logout_user, login_required
 from .users import User
 from bcrypt import hashpw, gensalt
@@ -15,9 +16,13 @@ def register():
     
 @auth.route('/register', methods=['POST'])
 def register_post():
-    inputname = request.form.get('name')
-    inputpassword = request.form.get('password')
-    inputemail = request.form.get('email')
+    inputname = escape(request.form.get('name'))
+    inputpassword = escape(request.form.get('password'))
+    inputemail = escape(request.form.get('email'))
+    
+    if not match(r"^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[@#$!*&])[\w\d@#$!*&]{6,12}$", inputpassword):
+        flash('Password must have at least 1 uppercase letter, 1 lowercase letter, 1 digit and 1 special character (@#$!*&)')
+        return redirect(url_for('auth.register'))
     
     usernameExists = User.query.filter_by(name=inputname).first()
     emailExists = User.query.filter_by(email=inputemail).first()
@@ -40,9 +45,9 @@ def login():
     
 @auth.route('/', methods=['POST'])
 def login_post():
-    name = (request.form.get('name'))
-    password = request.form.get('password')
-    email = request.form.get('email')
+    name = escape(request.form.get('name'))
+    password = escape(request.form.get('password'))
+    email = escape(request.form.get('email'))
     remember = True if request.form.get('remember') else False
     
     user = User.query.filter_by(name=name).first()
