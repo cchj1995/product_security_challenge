@@ -39,11 +39,11 @@ def register_post():
          db.session.commit()
          return redirect(url_for('auth.login'))
    
-@auth.route('/')
+@auth.route('/login')
 def login():
     return render_template('index.html')
     
-@auth.route('/', methods=['POST'])
+@auth.route('/login', methods=['POST'])
 def login_post():
     name = escape(request.form.get('name'))
     password = escape(request.form.get('password'))

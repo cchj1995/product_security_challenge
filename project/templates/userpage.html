@@ -4,9 +4,11 @@
 <body>
 
 {% if not current_user.is_authenticated %}
+Please either: 
 <a href="{{ url_for('auth.login') }}">
 	Login
 </a>
+or
 <a href="{{ url_for('auth.register') }}">
 	Sign Up
 </a>
